@@ -67,11 +67,6 @@ final class TasksViewController: UIViewController {
         return button
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupManagedContextObservers()
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadData()
@@ -136,17 +131,6 @@ extension TasksViewController {
 // MARK: - Data Functionalities
 extension TasksViewController {
     
-    private func setupManagedContextObservers() {
-        guard let context = self.persistentContainer?.viewContext else { return }
-        
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: context)
-    }
-    
-    @objc private func managedObjectContextObjectsDidChange(notification: NSNotification) {
-        self.loadData()
-    }
-    
     private func setupDateAndTaskCount(date: Date, count: Int) {
         customNavigationView?.titleLabel?.text = Date.getStringDate(of: date, format: .ddMMMMYYYY)
         if count == 0 {
@@ -166,9 +150,8 @@ extension TasksViewController {
             DispatchQueue.main.async { [weak self] in
                 self?.tableView?.tasks = tasks
                 self?.tableView?.reloadData()
+                self?.setupDateAndTaskCount(date: self?.date ?? .now, count: tasks?.count ?? 0)
             }
-            
-            self?.setupDateAndTaskCount(date: self?.date ?? .now, count: tasks?.count ?? 0)
         }
     }
 }

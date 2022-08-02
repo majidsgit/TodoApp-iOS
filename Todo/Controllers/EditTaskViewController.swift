@@ -44,7 +44,7 @@ final class EditTaskViewController: UIViewController {
     }()
     
     lazy var todoDateAndNotificationView: TodoDateAndNotificationView? = { [weak self] in
-        let date = TodoDateAndNotificationView(initDate: self?.date)
+        let date = TodoDateAndNotificationView(initDate: self?.date, initSwitchValue: self?.editingTask?.notification)
         
         date.onTap = { [weak self] in
             let dateSelectorVC = DateSelectorViewController(initDate: self?.editingTask?.deadline)
@@ -68,15 +68,20 @@ final class EditTaskViewController: UIViewController {
     lazy var addFloatingButton: CustomFloatingButtonView? = {
         let button = CustomFloatingButtonView(image: .checkButtonImage) { [weak self] in
             
-            self?.editingTask?.tags = String.combine(self?.todoTagsView?.tags ?? [])
+            guard let tags = self?.todoTagsView?.tags else { return }
             
-            CoreDataController.updateTaskNotificationState(of: self?.editingTask, using: self?.persistentContainer) { [weak self] isUpdated in
-                
-                if isUpdated {
-                    self?.navigationController?.popViewController(animated: true)
+            guard tags.count > 0 else { return }
+            
+            self?.editingTask?.changeTags(with: String.combine(tags))
+            
+            if self?.editingTask?.tags != "" {
+                CoreDataController.updateTask(with: self?.editingTask, using: self?.persistentContainer) { [weak self] isUpdated in
+                    
+                    if isUpdated {
+                        self?.navigationController?.popViewController(animated: true)
+                    }
                 }
             }
-            
         }
         return button
     }()

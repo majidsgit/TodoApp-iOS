@@ -32,6 +32,7 @@
 		8B9D94942895111700C1E492 /* TodoDateAndNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9D94932895111700C1E492 /* TodoDateAndNotificationView.swift */; };
 		8B9D94962895133400C1E492 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9D94952895133400C1E492 /* DateExtension.swift */; };
 		8BB1C1992897A9CB00906187 /* UNNotificationCenterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB1C1982897A9CB00906187 /* UNNotificationCenterExtension.swift */; };
+		8BB900B12899B724008FB263 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB900B02899B724008FB263 /* ArrayExtension.swift */; };
 		8BBC8AFA28917D4C006203AC /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBC8AF928917D4C006203AC /* AddTaskViewController.swift */; };
 		8BBC8AFC28917F70006203AC /* CustomFloatingButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBC8AFB28917F70006203AC /* CustomFloatingButtonView.swift */; };
 		8BBF337328986131004FA6A9 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBF337228986131004FA6A9 /* CoreDataController.swift */; };
@@ -87,6 +88,7 @@
 		8B9D94932895111700C1E492 /* TodoDateAndNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDateAndNotificationView.swift; sourceTree = "<group>"; };
 		8B9D94952895133400C1E492 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		8BB1C1982897A9CB00906187 /* UNNotificationCenterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UNNotificationCenterExtension.swift; sourceTree = "<group>"; };
+		8BB900B02899B724008FB263 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		8BBC8AF928917D4C006203AC /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
 		8BBC8AFB28917F70006203AC /* CustomFloatingButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFloatingButtonView.swift; sourceTree = "<group>"; };
 		8BBF337228986131004FA6A9 /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				8B9D94952895133400C1E492 /* DateExtension.swift */,
 				8BD9ADBC28967D920038DEE0 /* StringExtension.swift */,
 				8BB1C1982897A9CB00906187 /* UNNotificationCenterExtension.swift */,
+				8BB900B02899B724008FB263 /* ArrayExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 				8BDA373D289280F900A2236B /* UIColorExtension.swift in Sources */,
 				8BD9ADBD28967D920038DEE0 /* StringExtension.swift in Sources */,
 				8B92112A289677BC006880B4 /* TagsCellView.swift in Sources */,
+				8BB900B12899B724008FB263 /* ArrayExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

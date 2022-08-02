@@ -92,8 +92,8 @@ class TaskTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     enum NotificationState: String {
-        case pending = "bell"
-        case expired = "bell.fill"
+        case pending = "bell.fill"
+        case expired = "bell"
         case off = "bell.slash"
     }
     
@@ -127,13 +127,16 @@ class TaskTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         edit.image = UIImage(systemName: "pencil")
         edit.backgroundColor = .systemGray2
         
+        
+        
+        
         let notification = UIContextualAction(style: .normal, title: "Notification") { [weak self] _, _, completion in
             
             if let taskNotificationDidChange = self?.taskNotificationDidChange {
                 taskNotificationDidChange(datum)
             }
             
-            return completion(false)
+            return completion(true)
         }
         if datum.notification {
             if datum.deadline < Date() {
@@ -144,8 +147,9 @@ class TaskTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         } else {
             notification.image = .init(systemName: NotificationState.off.rawValue)
         }
-                                           
         notification.backgroundColor = .systemGray3
+        
+        
         
         
         let swipeActions = UISwipeActionsConfiguration(actions: [delete, edit, notification])

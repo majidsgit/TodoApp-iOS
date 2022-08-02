@@ -39,7 +39,7 @@ class TodoDateAndNotificationView: UIView {
         return notificationSwitch
     }()
     
-    init(initDate: Date?) {
+    init(initDate: Date?, initSwitchValue: Bool?) {
         super.init(frame: .zero)
         
         addSubview(titleLabel!)
@@ -52,6 +52,7 @@ class TodoDateAndNotificationView: UIView {
         
         addSubview(notificationSwitch!)
         notificationSwitch?.translatesAutoresizingMaskIntoConstraints = false
+        notificationSwitch?.isOn = initSwitchValue ?? true
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
         tapGesture.numberOfTapsRequired = 1

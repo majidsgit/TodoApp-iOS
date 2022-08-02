@@ -10,6 +10,13 @@ import UserNotifications
 
 final class CoreDataController {
     
+    
+    
+    
+    
+    
+    
+    
     static func updateTaskState(with id: UUID, using container: NSPersistentContainer?, completion: @escaping (Bool) -> Void) {
         
         guard let context = container?.viewContext else {
@@ -44,6 +51,16 @@ final class CoreDataController {
         }
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     static func remove(task: Task, using container: NSPersistentContainer?, completion: @escaping (Bool?) -> Void ) {
         guard let context = container?.viewContext else {
             fatalError("error loading persistent container.")
@@ -67,6 +84,16 @@ final class CoreDataController {
             completion(false)
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     static func fetchItems(of date: Date?, using container: NSPersistentContainer?, completion: @escaping ([Task]?) -> Void) {
         
@@ -101,6 +128,15 @@ final class CoreDataController {
         completion(tasks)
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
     static func add(new task: Task?, with tags: [String]?, using container: NSPersistentContainer?, completion: @escaping (Bool) -> Void) {
         
         // save data!
@@ -111,7 +147,9 @@ final class CoreDataController {
         
         var stringTag = ""
         if let tags = tags {
-            stringTag = String.combine(tags)
+            if tags.isNotEmpty() {
+                stringTag = String.combine(tags)
+            }
         }
         
         guard task?.title != "" && stringTag != "" && task?.deadline != nil else {
@@ -133,6 +171,14 @@ final class CoreDataController {
         }
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
     static func updateTaskNotificationState(of task: Task?, using container: NSPersistentContainer?, completion: @escaping (Bool) -> Void) {
         
         guard let context = container?.viewContext, let task = task else {
@@ -147,22 +193,19 @@ final class CoreDataController {
         guard let result = try? context.fetch(fetchRequest) as [NSManagedObject] else {
             return completion(false)
         }
-        
         if let first = result.first {
-            first.setValue(task.deadline, forKey: "deadline")
-            first.setValue(task.notification ? 1 : 0, forKey: "notification")
-            first.setValue(task.isFinished ? 1 : 0, forKey: "isFinished")
-            first.setValue(task.tags, forKey: "tags")
-            first.setValue(task.title, forKey: "title")
+            guard let lastState = first.value(forKey: "notification") as? Int else {
+                return completion(false)
+            }
+            first.setValue(lastState == 0 ? 1 : 0, forKey: "notification")
             do {
                 try context.save()
-                if task.notification == false {
+                if lastState == 0 {
+                    // now it's done, so we remove the notification.
                     UNUserNotificationCenter.removeNotification(with: task.id)
                 } else {
                     if task.deadline >= Date() {
                         UNUserNotificationCenter.addNotification(item: task)
-                    } else {
-                        UNUserNotificationCenter.removeNotification(with: task.id)
                     }
                 }
                 return completion(true)
@@ -189,18 +232,28 @@ final class CoreDataController {
         }
         
         if let first = result.first {
-            guard let lastState = first.value(forKey: "notification") as? Int else {
+            
+            guard let notificationPreviousState = first.value(forKey: "notification") as? Bool else {
                 return completion(false)
             }
-            first.setValue(lastState == 0 ? 1 : 0, forKey: "notification")
+            
+            let isNotificationChanged = notificationPreviousState != task.notification
+            
+            first.setValue(task.deadline, forKey: "deadline")
+            first.setValue(task.notification ? 1 : 0, forKey: "notification")
+            first.setValue(task.isFinished ? 1 : 0, forKey: "isFinished")
+            first.setValue(task.tags, forKey: "tags")
+            first.setValue(task.title, forKey: "title")
+            
             do {
                 try context.save()
-                if lastState == 0 {
-                    // now it's done, so we remove the notification.
-                    UNUserNotificationCenter.removeNotification(with: task.id)
-                } else {
-                    if task.deadline >= Date() {
-                        UNUserNotificationCenter.addNotification(item: task)
+                if isNotificationChanged {
+                    if notificationPreviousState == true {
+                        UNUserNotificationCenter.removeNotification(with: task.id)
+                    } else {
+                        if task.deadline >= Date() {
+                            UNUserNotificationCenter.addNotification(item: task)
+                        }
                     }
                 }
                 return completion(true)
@@ -209,6 +262,6 @@ final class CoreDataController {
                 return completion(false)
             }
         }
+        
     }
-    
 }

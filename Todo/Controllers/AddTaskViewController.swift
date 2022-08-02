@@ -33,13 +33,18 @@ final class AddTaskViewController: UIViewController {
     }()
     
     lazy var todoTagsView: TodoTagsView? = {
-        let tags = TodoTagsView(initTagString: nil)
+        let tagsView = TodoTagsView(initTagString: nil)
         
-        return tags
+        tagsView.tagItemHoldDidOccur = { [weak self] tagIndex, tagValue in
+            self?.todoTagsView?.tags?.remove(at: tagIndex)
+            self?.newTask.changeTags(with: String.combine(self?.todoTagsView?.tags ?? []))
+        }
+        
+        return tagsView
     }()
     
     lazy var todoDateAndNotificationView: TodoDateAndNotificationView? = { [weak self] in
-        let date = TodoDateAndNotificationView(initDate: self?.date)
+        let date = TodoDateAndNotificationView(initDate: self?.date, initSwitchValue: self?.newTask.notification)
         
         date.onTap = { [weak self] in
             let dateSelectorVC = DateSelectorViewController(initDate: self?.date)
@@ -68,15 +73,13 @@ final class AddTaskViewController: UIViewController {
                     if let isNotificationAvailable = self?.newTask.notification {
                         if isNotificationAvailable {
                             UNUserNotificationCenter.addNotification(item: self?.newTask)
-                            self?.navigationController?.popViewController(animated: true)
                         }
-                    } else {
-                        self?.navigationController?.popViewController(animated: true)
                     }
-                } else {
                     self?.navigationController?.popViewController(animated: true)
                 }
             }
+            
+            
             
         }
         return button

@@ -14,7 +14,7 @@ class TodoTagsView: UIView, UITextFieldDelegate {
         didSet {
             // update
             DispatchQueue.main.async { [weak self] in
-                UIView.animate(withDuration: 1.0, delay: 0, options: .beginFromCurrentState) {
+                UIView.animate(withDuration: 1.0, delay: 0, options: .curveEaseIn) {
                     self?.collectionView?.tags = self?.tags ?? []
                     self?.collectionView?.reloadData()
                 }
