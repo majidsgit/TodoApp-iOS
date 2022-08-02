@@ -19,6 +19,13 @@ class TodoDateAndNotificationView: UIView {
         return label
     }()
     
+    private lazy var calendarImageView: UIImageView? = {
+        let imageView = UIImageView()
+        imageView.image = .init(named: "calendar")
+        imageView.tintColor = .text
+        return imageView
+    }()
+    
     lazy var dateLabel: UILabel? = {
         let label = UILabel()
         label.textColor = .text
@@ -46,6 +53,9 @@ class TodoDateAndNotificationView: UIView {
         titleLabel?.text = "Deadline"
         titleLabel?.translatesAutoresizingMaskIntoConstraints = false
         
+        addSubview(calendarImageView!)
+        calendarImageView?.translatesAutoresizingMaskIntoConstraints = false
+        
         addSubview(dateLabel!)
         dateLabel?.text = Date.getSummary(of: initDate ?? Date())
         dateLabel?.translatesAutoresizingMaskIntoConstraints = false
@@ -70,13 +80,19 @@ class TodoDateAndNotificationView: UIView {
         super.layoutSubviews()
         
         NSLayoutConstraint.activate([
+            
             titleLabel!.topAnchor.constraint(equalTo: topAnchor),
             titleLabel!.leadingAnchor.constraint(equalTo: leadingAnchor),
             
-            dateLabel!.topAnchor.constraint(greaterThanOrEqualTo: titleLabel!.bottomAnchor),
-            dateLabel!.leadingAnchor.constraint(equalTo: leadingAnchor),
+            calendarImageView!.topAnchor.constraint(equalTo: titleLabel!.bottomAnchor, constant: 4.0),
+            calendarImageView!.leadingAnchor.constraint(equalTo: leadingAnchor),
+            calendarImageView!.widthAnchor.constraint(equalToConstant: 24.0),
+            calendarImageView!.heightAnchor.constraint(equalToConstant: 24.0),
+            calendarImageView!.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            dateLabel!.centerYAnchor.constraint(equalTo: calendarImageView!.centerYAnchor),
+            dateLabel!.leadingAnchor.constraint(equalTo: calendarImageView!.trailingAnchor, constant: 8.0),
             dateLabel!.trailingAnchor.constraint(equalTo: trailingAnchor),
-            dateLabel!.bottomAnchor.constraint(equalTo: bottomAnchor),
             
             notificationSwitch!.trailingAnchor.constraint(equalTo: trailingAnchor),
             notificationSwitch!.bottomAnchor.constraint(equalTo: bottomAnchor),
