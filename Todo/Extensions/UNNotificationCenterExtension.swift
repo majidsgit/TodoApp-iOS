@@ -68,13 +68,8 @@ extension UNUserNotificationCenter {
         
         let content = UNMutableNotificationContent()
         content.title = "new task: " + item.title
-        if item.tags.count > 0 {
-            content.body = "with tags: " + item.tags
-        }
-        content.subtitle = "new task is waiting..."
-        content.badge = 0
-        content.interruptionLevel = .active
-        content.sound = .default
+        content.subtitle = "new task is waiting... " + item.tags
+        content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "notification.mp3"))
         
         let dateComponents = Calendar.current.dateComponents([.hour, .minute, .second, .day, .month, .year, .calendar], from: item.deadline)
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)

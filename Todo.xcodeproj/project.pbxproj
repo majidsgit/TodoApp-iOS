@@ -32,6 +32,7 @@
 		8B9D94942895111700C1E492 /* TodoDateAndNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9D94932895111700C1E492 /* TodoDateAndNotificationView.swift */; };
 		8B9D94962895133400C1E492 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9D94952895133400C1E492 /* DateExtension.swift */; };
 		8BB1C1992897A9CB00906187 /* UNNotificationCenterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB1C1982897A9CB00906187 /* UNNotificationCenterExtension.swift */; };
+		8BB21B54289A4AE8006DA07B /* notification.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8BB21B53289A4AE8006DA07B /* notification.mp3 */; };
 		8BB900B12899B724008FB263 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB900B02899B724008FB263 /* ArrayExtension.swift */; };
 		8BBC8AFA28917D4C006203AC /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBC8AF928917D4C006203AC /* AddTaskViewController.swift */; };
 		8BBC8AFC28917F70006203AC /* CustomFloatingButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBC8AFB28917F70006203AC /* CustomFloatingButtonView.swift */; };
@@ -88,6 +89,7 @@
 		8B9D94932895111700C1E492 /* TodoDateAndNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDateAndNotificationView.swift; sourceTree = "<group>"; };
 		8B9D94952895133400C1E492 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		8BB1C1982897A9CB00906187 /* UNNotificationCenterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UNNotificationCenterExtension.swift; sourceTree = "<group>"; };
+		8BB21B53289A4AE8006DA07B /* notification.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = notification.mp3; sourceTree = "<group>"; };
 		8BB900B02899B724008FB263 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		8BBC8AF928917D4C006203AC /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
 		8BBC8AFB28917F70006203AC /* CustomFloatingButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFloatingButtonView.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				8B1BDDA028914B6400039099 /* SceneDelegate.swift */,
 				8B1BDDAA28914B6600039099 /* Assets.xcassets */,
 				8B1BDDAC28914B6600039099 /* LaunchScreen.storyboard */,
+				8BB21B53289A4AE8006DA07B /* notification.mp3 */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -369,6 +372,7 @@
 			files = (
 				8B1BDDAE28914B6600039099 /* LaunchScreen.storyboard in Resources */,
 				8B1BDDAB28914B6600039099 /* Assets.xcassets in Resources */,
+				8BB21B54289A4AE8006DA07B /* notification.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

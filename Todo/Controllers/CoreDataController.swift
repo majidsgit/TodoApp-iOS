@@ -239,6 +239,12 @@ final class CoreDataController {
             
             let isNotificationChanged = notificationPreviousState != task.notification
             
+            guard let datePreviousValue = first.value(forKey: "deadline") as? Date else {
+                return completion(false)
+            }
+            
+            let dateChanged = datePreviousValue != task.deadline
+            
             first.setValue(task.deadline, forKey: "deadline")
             first.setValue(task.notification ? 1 : 0, forKey: "notification")
             first.setValue(task.isFinished ? 1 : 0, forKey: "isFinished")
@@ -247,13 +253,17 @@ final class CoreDataController {
             
             do {
                 try context.save()
-                if isNotificationChanged {
-                    if notificationPreviousState == true {
+                if isNotificationChanged{
+                    if notificationPreviousState == true && !dateChanged  {
                         UNUserNotificationCenter.removeNotification(with: task.id)
                     } else {
                         if task.deadline >= Date() {
                             UNUserNotificationCenter.addNotification(item: task)
                         }
+                    }
+                } else {
+                    if task.deadline >= Date() {
+                        UNUserNotificationCenter.addNotification(item: task)
                     }
                 }
                 return completion(true)
