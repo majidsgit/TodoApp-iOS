@@ -17,15 +17,15 @@ final class CoreDataController {
     
     
     
-    static func updateTaskState(with id: UUID, using container: NSPersistentContainer?, completion: @escaping (Bool) -> Void) {
+    static func updateTaskState(with task: Task?, using container: NSPersistentContainer?, completion: @escaping (Bool) -> Void) {
         
-        guard let context = container?.viewContext else {
+        guard let context = container?.viewContext, let task = task else {
             fatalError("error loading persistent container.")
         }
         
         let fetchRequest = NSFetchRequest<Entity>(entityName: "Entity")
         
-        let findByIdPredicate = NSPredicate(format: "%K == %@", #keyPath(Entity.identifier), id as CVarArg)
+        let findByIdPredicate = NSPredicate(format: "%K == %@", #keyPath(Entity.identifier), task.id as CVarArg)
         fetchRequest.predicate = findByIdPredicate
         
         guard let result = try? context.fetch(fetchRequest) as [NSManagedObject] else {
@@ -33,15 +33,39 @@ final class CoreDataController {
         }
         
         if let first = result.first {
+            
             guard let lastState = first.value(forKey: "isFinished") as? Int else {
                 return completion(false)
             }
+            
+            guard let notificationPreviousState = first.value(forKey: "notification") as? Bool else {
+                return completion(false)
+            }
+            
+            let isNotificationChanged = notificationPreviousState != task.notification
+            
+            guard let datePreviousValue = first.value(forKey: "deadline") as? Date else {
+                return completion(false)
+            }
+            
+            let dateChanged = datePreviousValue != task.deadline
+            
             first.setValue(lastState == 0 ? 1 : 0, forKey: "isFinished")
+            
             do {
                 try context.save()
-                if lastState == 0 {
-                    // now it's done, so we remove the notification.
-                    UNUserNotificationCenter.removeNotification(with: id)
+                if isNotificationChanged{
+                    if notificationPreviousState == true && !dateChanged  {
+                        UNUserNotificationCenter.removeNotification(with: task.id)
+                    } else {
+                        if task.deadline >= Date() {
+                            UNUserNotificationCenter.addNotification(item: task)
+                        }
+                    }
+                } else {
+                    if task.deadline >= Date() {
+                        UNUserNotificationCenter.addNotification(item: task)
+                    }
                 }
                 return completion(true)
             } catch let error {
@@ -194,15 +218,30 @@ final class CoreDataController {
             return completion(false)
         }
         if let first = result.first {
-            guard let lastState = first.value(forKey: "notification") as? Int else {
+            
+            guard let notificationPreviousState = first.value(forKey: "notification") as? Bool else {
                 return completion(false)
             }
-            first.setValue(lastState == 0 ? 1 : 0, forKey: "notification")
+            
+            let isNotificationChanged = notificationPreviousState != task.notification
+            
+            guard let datePreviousValue = first.value(forKey: "deadline") as? Date else {
+                return completion(false)
+            }
+            
+            let dateChanged = datePreviousValue != task.deadline
+            
+            first.setValue(notificationPreviousState == false ? 1 : 0, forKey: "notification")
             do {
                 try context.save()
-                if lastState == 0 {
-                    // now it's done, so we remove the notification.
-                    UNUserNotificationCenter.removeNotification(with: task.id)
+                if isNotificationChanged{
+                    if notificationPreviousState == true && !dateChanged  {
+                        UNUserNotificationCenter.removeNotification(with: task.id)
+                    } else {
+                        if task.deadline >= Date() {
+                            UNUserNotificationCenter.addNotification(item: task)
+                        }
+                    }
                 } else {
                     if task.deadline >= Date() {
                         UNUserNotificationCenter.addNotification(item: task)

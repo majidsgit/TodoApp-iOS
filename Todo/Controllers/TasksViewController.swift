@@ -29,6 +29,7 @@ final class TasksViewController: UIViewController {
             guard let taskToDelete = taskToDelete else { return }
             CoreDataController.remove(task: taskToDelete, using: self?.persistentContainer) { isDeleted in
                 completion(isDeleted)
+                self?.loadData()
             }
         }
         
@@ -42,9 +43,12 @@ final class TasksViewController: UIViewController {
             }
         }
         
-        tableView.taskNotificationDidChange = { [weak self] taskItem in
+        tableView.taskNotificationDidChange = { [weak self] taskItem, completion in
             CoreDataController.updateTaskNotificationState(of: taskItem, using: self?.persistentContainer) { isUpdated in
-                self?.loadData()
+                if isUpdated {
+                    completion(isUpdated)
+                    self?.loadData()
+                }
             }
         }
         

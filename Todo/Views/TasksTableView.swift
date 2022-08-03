@@ -16,8 +16,8 @@ class TaskTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     var deleteItemUsingSwipe: ( (Task?, @escaping (Bool?) -> Void ) -> Void )?
-    var taskStateDidChange: ( (UUID) -> Void )?
-    var taskNotificationDidChange: ( (Task?) -> Void )?
+    var taskStateDidChange: ( (Task?) -> Void )?
+    var taskNotificationDidChange: ( (Task?, @escaping (Bool?) -> Void) -> Void )?
     
     var taskEditButtonDidTap: ( (Task) -> Void )?
     
@@ -54,7 +54,7 @@ class TaskTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         if let cell = cell as? TaskCellView {
             cell.taskStateDidChange = { [weak self] newState in
                 if let taskStateDidChange = self?.taskStateDidChange {
-                    taskStateDidChange(datum.id)
+                    taskStateDidChange(datum)
                 }
             }
         }
@@ -133,7 +133,11 @@ class TaskTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         let notification = UIContextualAction(style: .normal, title: "Notification") { [weak self] _, _, completion in
             
             if let taskNotificationDidChange = self?.taskNotificationDidChange {
-                taskNotificationDidChange(datum)
+                taskNotificationDidChange(datum) { isSuccess in
+                    if let isSuccess = isSuccess {
+                        completion(isSuccess)
+                    }
+                }
             }
             
             return completion(true)
