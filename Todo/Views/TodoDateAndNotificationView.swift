@@ -21,7 +21,7 @@ class TodoDateAndNotificationView: UIView {
     
     private lazy var calendarImageView: UIImageView? = {
         let imageView = UIImageView()
-        imageView.image = .init(named: "calendar")
+        imageView.image = .init(named: "calendar")?.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = .text
         return imageView
     }()
@@ -91,7 +91,7 @@ class TodoDateAndNotificationView: UIView {
             calendarImageView!.bottomAnchor.constraint(equalTo: bottomAnchor),
             
             dateLabel!.centerYAnchor.constraint(equalTo: calendarImageView!.centerYAnchor),
-            dateLabel!.leadingAnchor.constraint(equalTo: calendarImageView!.trailingAnchor, constant: 8.0),
+            dateLabel!.leadingAnchor.constraint(equalTo: calendarImageView!.trailingAnchor, constant: 4.0),
             dateLabel!.trailingAnchor.constraint(equalTo: trailingAnchor),
             
             notificationSwitch!.trailingAnchor.constraint(equalTo: trailingAnchor),
