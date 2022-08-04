@@ -9,11 +9,16 @@ import UIKit
 
 final class DateSelectorViewController: UIViewController {
     
-    var selectedDate: Date? = Date()
+    var selectedDate: Date? = nil
     var dateDidSelect: ( (Date) -> Void )? = nil
     
     private lazy var datePickerView: CustomDatePickerView? = { [weak self] in
-        let datePicker = CustomDatePickerView(date: self?.selectedDate)
+        
+        guard let selectedDate = self?.selectedDate else {
+            return nil
+        }
+
+        let datePicker = CustomDatePickerView(date: selectedDate)
         
         datePicker.valueChanged = { [weak self] newDate in
             if let dateDidSelect = self?.dateDidSelect, let newDate = newDate {
@@ -26,7 +31,12 @@ final class DateSelectorViewController: UIViewController {
     }()
     
     private lazy var timePickerView: CustomDatePickerView? = { [weak self] in
-        let timePicker = CustomDatePickerView(date: self?.selectedDate)
+        
+        guard let selectedDate = self?.selectedDate else {
+            return nil
+        }
+        
+        let timePicker = CustomDatePickerView(date: selectedDate)
         timePicker.preferredDatePickerStyle = .compact
         timePicker.datePickerMode = .time
         
@@ -105,7 +115,7 @@ final class DateSelectorViewController: UIViewController {
     
     init(initDate: Date?) {
         super.init(nibName: nil, bundle: nil)
-        self.selectedDate = initDate
+        self.selectedDate = initDate ?? Date()
     }
     
     required init?(coder: NSCoder) {

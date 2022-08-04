@@ -33,6 +33,7 @@ class TaskTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         backgroundColor = nil
         scrollsToTop = false
         tableHeaderView = UIView()
+        tableFooterView = UIView(frame: .init(origin: .zero, size: CGSize(width: 0, height: 85.0)))
         separatorStyle = .none
         allowsSelection = false
     }
