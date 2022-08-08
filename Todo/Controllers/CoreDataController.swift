@@ -34,43 +34,26 @@ final class CoreDataController {
         
         if let first = result.first {
             
-            guard let lastState = first.value(forKey: "isFinished") as? Int else {
+            guard let lastFinishState = first.value(forKey: "isFinished") as? Int else {
                 return completion(false)
             }
             
-            guard let notificationPreviousState = first.value(forKey: "notification") as? Bool else {
-                return completion(false)
-            }
-            
-            let isNotificationChanged = notificationPreviousState != task.notification
-            
-            guard let datePreviousValue = first.value(forKey: "deadline") as? Date else {
-                return completion(false)
-            }
-            
-            let dateChanged = datePreviousValue != task.deadline
-            
-            first.setValue(lastState == 0 ? 1 : 0, forKey: "isFinished")
+            first.setValue(lastFinishState == 0 ? 1 : 0, forKey: "isFinished")
             
             do {
-                try context.save()
-                if isNotificationChanged{
-                    if !dateChanged  {
-                        if notificationPreviousState == true {
-                            UNUserNotificationCenter.removeNotification(with: task.id)
-                        } else if task.deadline >= Date() {
-                            UNUserNotificationCenter.addNotification(item: task)
-                        }
-                    } else {
-                        if task.deadline >= Date() {
-                            UNUserNotificationCenter.addNotification(item: task)
-                        }
-                    }
+                
+                if lastFinishState == 0 {
+                    UNUserNotificationCenter.removeNotification(with: task.id)
+                    first.setValue(0, forKey: "notification")
                 } else {
                     if task.deadline >= Date() {
                         UNUserNotificationCenter.addNotification(item: task)
+                        first.setValue(1, forKey: "notification")
                     }
                 }
+                
+                try context.save()
+                
                 return completion(true)
             } catch let error {
                 print(error.localizedDescription)
@@ -227,30 +210,20 @@ final class CoreDataController {
                 return completion(false)
             }
             
-            let isNotificationChanged = notificationPreviousState != task.notification
-            
-            guard let datePreviousValue = first.value(forKey: "deadline") as? Date else {
-                return completion(false)
-            }
-            
-            let dateChanged = datePreviousValue != task.deadline
-            
             first.setValue(notificationPreviousState == false ? 1 : 0, forKey: "notification")
             do {
                 try context.save()
-                if isNotificationChanged{
-                    if notificationPreviousState == true && !dateChanged  {
-                        UNUserNotificationCenter.removeNotification(with: task.id)
-                    } else {
-                        if task.deadline >= Date() {
-                            UNUserNotificationCenter.addNotification(item: task)
-                        }
-                    }
-                } else {
+                
+                if task.notification {
                     if task.deadline >= Date() {
                         UNUserNotificationCenter.addNotification(item: task)
+                    } else {
+                        UNUserNotificationCenter.removeNotification(with: task.id)
                     }
+                } else {
+                    UNUserNotificationCenter.removeNotification(with: task.id)
                 }
+                
                 return completion(true)
             } catch let error {
                 print(error.localizedDescription)
