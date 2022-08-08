@@ -126,6 +126,19 @@ final class CustomNavigationBarView: UIView {
         dateSelector?.layoutSubviews()
     }
     
+    func setDate(with movingTo: Int) {
+        DispatchQueue.main.async { [weak self] in
+            if let date = self?.dateSelector?.date {
+                if let newDate = Calendar.current.date(byAdding: .day, value: movingTo, to: date) {
+                    self?.dateSelector?.date = newDate
+                    if let dateDidSelect = self?.dateDidSelect {
+                        dateDidSelect(newDate)
+                    }
+                }
+            }
+        }
+    }
+    
     init(title: String? = nil, subtitle: String? = nil, hasBackButton: Bool? = false, hasDateSelector: Bool? = false) {
         
         let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 150.0)

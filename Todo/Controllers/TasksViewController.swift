@@ -90,6 +90,14 @@ final class TasksViewController: UIViewController {
 // MARK: - View Functionalities
 extension TasksViewController {
     
+    @objc private func dragRight() {
+        customNavigationView?.setDate(with: +1)
+    }
+    
+    @objc private func dragLeft() {
+        customNavigationView?.setDate(with: -1)
+    }
+    
     override func loadView() {
         let view = UIView()
         
@@ -103,7 +111,16 @@ extension TasksViewController {
         
         view.addSubview(addFloatingButton!)
         addFloatingButton?.translatesAutoresizingMaskIntoConstraints = false
-
+        view.isUserInteractionEnabled = true
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(dragLeft))
+        swipeRight.direction = .right
+        view.addGestureRecognizer(swipeRight)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(dragRight))
+        swipeLeft.direction = .left
+        view.addGestureRecognizer(swipeLeft)
+        
         self.view = view
     }
     

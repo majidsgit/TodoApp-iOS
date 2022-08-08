@@ -55,8 +55,12 @@ final class CoreDataController {
             do {
                 try context.save()
                 if isNotificationChanged{
-                    if notificationPreviousState == true && !dateChanged  {
-                        UNUserNotificationCenter.removeNotification(with: task.id)
+                    if !dateChanged  {
+                        if notificationPreviousState == true {
+                            UNUserNotificationCenter.removeNotification(with: task.id)
+                        } else if task.deadline >= Date() {
+                            UNUserNotificationCenter.addNotification(item: task)
+                        }
                     } else {
                         if task.deadline >= Date() {
                             UNUserNotificationCenter.addNotification(item: task)
